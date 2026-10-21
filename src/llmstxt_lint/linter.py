@@ -85,8 +85,8 @@ def lint_text(text: str, kind: str = "llms") -> list[Issue]:
         if section is None:
             continue
         stripped = line.strip()
-        if not stripped:
-            continue
+        if not stripped or (stripped.startswith("<!--") and stripped.endswith("-->")):
+            continue  # blank line or HTML comment (e.g. suppression directives)
         lm = LINK_ITEM.match(stripped)
         if lm:
             section[2] += 1

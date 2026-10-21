@@ -9,6 +9,7 @@ from . import __version__
 from .linter import Issue, lint_text
 from .remote import check_links, fetch, is_url
 from .sarif import to_sarif
+from .suppress import apply as apply_suppressions
 
 
 def _kind(name: str, forced: bool) -> str:
@@ -27,6 +28,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--base-url", help="Resolve relative links against this URL with --check-links")
     ap.add_argument("--timeout", type=float, default=10.0, help="Network timeout in seconds (default 10)")
     ap.add_argument("--concurrency", type=int, default=8, help="Parallel link checks (default 8)")
+    ap.add_argument("--no-inline-config", action="store_true",
+                    help="Ignore <!-- llmstxt-lint-disable --> comments in files")
     ap.add_argument("--version", action="version", version=__version__)
     a = ap.parse_args(argv)
     ignored = {r.strip() for r in a.ignore.split(",") if r.strip()}
@@ -51,6 +54,8 @@ def main(argv: list[str] | None = None) -> int:
         if a.check_links:
             issues += check_links(text, base=base, timeout=a.timeout, concurrency=a.concurrency)
             issues.sort(key=lambda i: (i.line, i.rule))
+        if not a.no_inline_config:
+            issues = apply_suppressions(text, issues)
         report[f] = [i for i in issues if i.rule not in ignored]
     failed = any(i.severity == "error" or a.strict for v in report.values() for i in v)
     if a.format == "json":

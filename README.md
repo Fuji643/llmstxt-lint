@@ -45,6 +45,23 @@ examples/bad.txt:7: warning [optional-not-last] The 'Optional' section should be
 ...
 ```
 
+### Inline suppressions
+
+Silence an intentional finding in the file itself (HTML comments are invisible to Markdown renderers):
+
+```markdown
+<!-- llmstxt-lint-disable-next-line link-notes-format -->
+- [Guide](/guide.md) - kept for an older consumer
+
+<!-- llmstxt-lint-disable duplicate-link -->
+...
+<!-- llmstxt-lint-enable duplicate-link -->
+
+<!-- llmstxt-lint-disable-file missing-summary -->
+```
+
+Leave out the rule list to cover all rules. Separate several rules with commas or spaces. `--no-inline-config` ignores these comments.
+
 ## GitHub Action
 
 ```yaml
