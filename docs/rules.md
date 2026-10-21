@@ -2,6 +2,8 @@
 
 Every finding has a stable rule id that you can pass to `--ignore`. Errors make the CLI exit with 1; warnings only do so with `--strict`.
 
+Any rule can be silenced in the file with `<!-- llmstxt-lint-disable-next-line rule-id -->`, `<!-- llmstxt-lint-disable rule-id -->` … `<!-- llmstxt-lint-enable rule-id -->`, or `<!-- llmstxt-lint-disable-file rule-id -->`. Leave out the rule id to cover all rules. `--no-inline-config` turns this off.
+
 For `llms-full.txt` (auto-detected by file name, or `--full`), only `empty-file`, `html-content`, `unclosed-code-fence` and `missing-h1` (as a warning, when there is no H1 anywhere) apply. Real full files concatenate many pages and often start with a preamble such as `<SYSTEM>…</SYSTEM>` (e.g. hono.dev), so they are free-form Markdown.
 
 ### `empty-file`

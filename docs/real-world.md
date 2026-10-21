@@ -42,7 +42,7 @@ The first run of v0.1.0 over these files produced many errors that were really r
 |---|---|---|
 | Every bullet in a notes-only section was an error (`list-item-not-link`) | `## Notes` in svelte.dev, `## When to use Vercel` in vercel.com | Note-only sections are reported once as `empty-section`; `list-item-not-link` is a warning and only fires in sections that contain links |
 | H3 headings were warnings | docs.expo.dev (54), docs.stripe.com (16), docs.anthropic.com (12) use H3 sub-groups | H3 allowed; only H4+ warns |
-| No detection of HTML | docs.cursor.com returned an HTML page when requested with `Accept: */*` (plain curl) | New `html-content` error; the built-in fetcher sends `Accept: text/plain, text/markdown` |
+| No detection of HTML | docs.cursor.com/llms.txt 308-redirects to cursor.com/docs, which returns HTML unless `Accept` includes `text/markdown` (plain curl gets HTML) | New `html-content` error; the built-in fetcher sends `Accept: text/plain, text/markdown, */*` |
 | `--check-links` (new) flagged `HTTP 401` | supabase.com lists its MCP endpoint `https://mcp.supabase.com/mcp`, which requires auth | 401/403/429 are treated as reachable, not broken |
 | llms-full.txt checked like llms.txt | hono.dev/llms-full.txt starts with `<SYSTEM>…</SYSTEM>` and contains many H1s | Dedicated full mode: only requires an H1 somewhere |
 
@@ -51,6 +51,7 @@ The first run of v0.1.0 over these files produced many errors that were really r
 - `link-notes-format`: docs.anthropic.com uses `- [name](url) - notes` (149 items). The spec, and the reference parser `llms_txt.parse_llms_file`, expect `: notes`.
 - `duplicate-link`: docs.stripe.com lists 7 URLs twice.
 - `duplicate-section`: docs.expo.dev repeats 4 H2 names.
+- docs.cursor.com: even the Markdown version is a docs page (H3 cards, no link lists), so every section is reported as `empty-section`.
 - `missing-summary`: 7 of 19 sites have no `> summary` line.
 
 ## Compatibility with the reference parser

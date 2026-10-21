@@ -4,6 +4,14 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/) and [
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-21
+### Added
+- Inline suppression comments: `llmstxt-lint-disable`, `-enable`, `-disable-next-line`, `-disable-file`, with or without rule lists (#7).
+- `--no-inline-config` CLI flag and `inline_config=` parameter of `lint_text()`.
+
+### Fixed
+- HTML comment lines inside sections are no longer reported as `prose-in-section`.
+
 ## [0.2.0] - 2026-10-21
 ### Added
 - Lint remote files: `llmstxt-lint https://site/llms.txt`.
